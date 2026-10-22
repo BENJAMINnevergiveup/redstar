@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《红星照耀中国》复习闯关</title>
+<style>
+:root{--red:#b91c1c;--ink:#2d2a26;--line:#e7ddc8;--paper:#faf7f0}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans SC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.8}
+#errbar{display:none;position:fixed;top:0;left:0;right:0;z-index:200;background:#b91c1c;color:#fff;font-size:13px;padding:10px 14px}
+header{background:linear-gradient(135deg,#7f1d1d,#b91c1c 55%,#951a1a);color:#fff;text-align:center;padding:22px 16px 18px}
+header h1{font-size:24px;letter-spacing:2px}
+header .sub{font-size:13px;opacity:.9;margin-top:6px}
+.tabs{display:flex;gap:8px;max-width:920px;margin:14px auto 0;padding:0 14px;position:sticky;top:0;z-index:60}
+.tab-btn{flex:1;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:15px;font-weight:700;padding:11px 4px;border-radius:12px;cursor:pointer;box-shadow:0 2px 6px rgba(120,90,40,.08)}
+.tab-btn.active{background:var(--red);border-color:var(--red);color:#fff}
+.wrap{max-width:920px;margin:0 auto;padding:4px 14px 70px}
+.panel{display:none}
+.panel.active{display:block}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 18px 10px;margin:14px 0;box-shadow:0 2px 10px rgba(120,90,40,.07)}
+.card h2{font-size:19px;color:var(--red);border-bottom:2px solid #f3e8d2;padding-bottom:8px;margin-bottom:10px}
+.card h3{font-size:15.5px;color:#92400e;margin:12px 0 4px}
+p{margin:6px 0}
+ul{margin:4px 0 6px 22px}
+li{margin:4px 0}
+.tip{font-size:13px;color:#8a7a5c}
+.hint{font-size:14px;color:#8a7a5c;background:#faf3e3;border-radius:8px;padding:8px 12px;margin-top:8px}
+r{color:#c8102e;font-weight:700}
+.tag{display:inline-block;background:#fde8e8;color:var(--red);font-size:12px;font-weight:700;border-radius:6px;padding:1px 8px;margin-right:6px}
+details{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fffdf8;overflow:hidden}
+summary{cursor:pointer;padding:11px 14px 11px 34px;font-weight:700;list-style:none;position:relative}
+summary::-webkit-details-marker{display:none}
+summary:before{content:'▸';position:absolute;left:14px;top:10px;color:var(--red);font-size:15px;transition:transform .18s}
+details[open] summary:before{transform:rotate(90deg)}
+.inner{padding:2px 16px 12px;border-top:1px dashed #ecdfc4;font-size:14.5px}
+.form-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0 4px}
+.form-row label{font-weight:700;font-size:14px;white-space:nowrap}
+input{border:1px solid #d8cbaa;border-radius:10px;padding:10px 12px;font-size:15px;background:#fffdf6;flex:1;min-width:130px}
+input:focus{outline:2px solid #f3c98b}
+.btn{background:var(--red);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:15px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--red);border:1px solid var(--red)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.tbtn{background:#fff;color:#8a7a5c;border:1px dashed #d8cbaa;font-size:13px;padding:7px 14px;border-radius:10px;cursor:pointer;font-family:inherit}
+.tbtn:hover{color:var(--red);border-color:var(--red)}
+.q-top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px;color:#8a7a5c;margin:6px 0}
+.q-note{display:none;background:#fff7e0;border:1px solid #e8cf8f;color:#7c5a12;border-radius:8px;padding:8px 12px;font-size:13.5px;margin:8px 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px}
+.chip{width:34px;height:34px;border-radius:8px;border:1px solid #ddd0ae;background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;color:#6b5f45}
+.chip.ok{background:#e7f6ec;border-color:#7fce9a;color:#177b3e}
+.chip.bad{background:#fdecec;border-color:#e59a9a;color:#b91c1c}
+.chip.cur{outline:2px solid var(--red);outline-offset:1px}
+.q-text{font-size:16px;font-weight:700;margin:4px 0 10px}
+.opt{display:block;width:100%;text-align:left;border:1px solid #e2d7bc;background:#fffdf8;border-radius:10px;padding:11px 13px;font-size:15px;margin:8px 0;cursor:pointer;line-height:1.6;font-family:inherit;color:var(--ink)}
+.opt:hover{border-color:var(--red)}
+.opt.lock{cursor:default}
+.opt.lock:hover{border-color:#e2d7bc}
+.opt.right{background:#e7f6ec;border-color:#57b878;color:#14532d;font-weight:700}
+.opt.wrong{background:#fdecec;border-color:#d9534f;color:#7f1d1d;font-weight:700}
+.fb{font-size:13.5px;border-radius:8px;padding:8px 12px;margin:8px 0}
+.fb.ok{background:#e7f6ec;color:#166534}
+.fb.bad{background:#fdecec;color:#7f1d1d}
+.exp{background:#faf3e3;border:1px solid #eadfc4;border-radius:8px;padding:8px 12px;margin:8px 0;font-size:13.5px;color:#5c4a22}
+.q-nav{display:flex;gap:10px;margin:14px 0 6px}
+.q-nav .btn{flex:1}
+.score-card{text-align:center;border:2px dashed #e8b86d;background:#fffbf2;border-radius:14px;padding:22px 16px;margin:14px 0}
+.score-num{font-size:46px;font-weight:800;color:var(--red);line-height:1.2}
+.score-msg{font-size:16px;font-weight:700;margin:6px 0 2px}
+.score-sub{font-size:13px;color:#8a7a5c}
+table.board{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:8px}
+.board th,.board td{border-bottom:1px solid #f0e6cf;padding:9px 8px;text-align:center}
+.board th{background:#faf3e3;color:#7c6a3f}
+.board tr.me td{background:#fff7e0}
+.rank1{color:#d97706;font-weight:800}
+.rank2{color:#6b7280;font-weight:700}
+.rank3{color:#b45309;font-weight:700}
+.mask{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(40,20,10,.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:18px}
+.modal{background:#fff;border-radius:14px;max-width:540px;width:100%;padding:20px;box-shadow:0 10px 40px rgba(0,0,0,.25);max-height:80vh;overflow:auto}
+.modal h3{color:var(--red);margin-bottom:8px}
+.modal p{margin:6px 0}
+.m-ans{font-weight:700;color:#166534}
+@media(max-width:600px){header h1{font-size:20px}.card{padding:14px 12px 6px}.tab-btn{font-size:14px;padding:10px 2px}}
+</style>
+</head>
+<body>
+<div id="errbar"></div>
+<header>
+<h1>★ 《红星照耀中国》复习闯关</h1>
+<div class="sub">纪实经典 · 人物档案 · 篇章精讲 · 知识闯关 · 班级榜单</div>
+</header>
+<div class="tabs">
+<button class="tab-btn active" id="tb0" onclick="showTab(0)">复习闯关</button>
+<button class="tab-btn" id="tb1" onclick="showTab(1)">知识闯关</button>
+<button class="tab-btn" id="tb2" onclick="showTab(2)">成绩榜单</button>
+</div>
+<div class="wrap">
+
+<section id="panel0" class="panel active">
+
+<div class="card">
+<h2>一、作品概况（文学常识）</h2>
+<p>《红星照耀中国》又名<r>《西行漫记》</r>，作者是<r>美国著名记者埃德加·斯诺</r>。<r>1936年6月至10月</r>，斯诺冒着生命危险穿过国民党封锁线，深入<r>陕甘宁边区</r>（陕北苏区），对中共领导人和红军将士进行了广泛采访，写成了这部不朽的纪实作品。该书于<r>1937年10月在伦敦首次出版</r>，是<r>第一部向全世界真实报道中国共产党和中国工农红军</r>的著作，出版后轰动世界。</p>
+<p><span class="tag">文体</span>本书属于<r>纪实文学（报告文学）</r>：作者以第一人称记录自己的采访行程，把实地考察、人物访谈与新闻纪实融为一体，<r>真实</r>是它的生命。判断题里把它说成“小说”“自传”都是常见设错。</p>
+<p><span class="tag">书名含义</span>“红星”象征<r>中国共产党及其领导的红色革命</r>——它如一颗闪亮的红星，不仅照耀着中国的西北，而且必将<r>照耀全中国</r>。这是斯诺基于苏区见闻作出的著名预言。</p>
+<p><span class="tag">写作特色</span>作者通过<r>实地采访、人物口述、亲眼观察</r>获取第一手材料；善用<r>外貌、语言、动作等细节描写</r>刻画人物；语言朴实生动，夹叙夹议，兼具记者的敏锐与文学家的笔力。</p>
+<p class="tip">中考提示：文学常识常考作者国籍身份、成书时间、书名含义与文体特征四个点。</p>
+</div>
+
+<div class="card">
+<h2>二、人物档案（重点识记）</h2>
+<p class="tip">逐个点开，重点抓【外貌关键词】与【专属情节】——中考最爱考“描写→人物”的对应和“情节→人物”的匹配。</p>
+
+<details>
+<summary><span class="tag">档案1</span>毛泽东 —— 苏维埃政府主席</summary>
+<div class="inner">
+<p><b>身份定位</b>：中华苏维埃共和国主席，红军的核心领袖，斯诺笔下“令人极感兴趣而复杂的人”。</p>
+<p><b>外貌形象</b>：<r>面容瘦削、看上去很像林肯</r>；个子高出一般中国人，<r>背有些驼</r>，黑发浓密，双眼炯炯有神，鼻梁很高，<r>颧骨突出</r>。</p>
+<p><b>性格特点</b>：有中国农民的<r>质朴纯真</r>，又兼有<r>锐利的机智和老练世故</r>；幽默爱笑，<r>精力过人、不知疲倦</r>。</p>
+<p><b>生活细节</b>：住简陋<r>窑洞</r>，全部财物只有<r>一卷铺盖和几件随身衣物</r>；伙食与大家一样，<r>爱吃辣椒</r>，常拿辣椒开玩笑；<r>博览群书</r>，对哲学和历史有深入研究，能与斯诺<r>彻夜长谈</r>。</p>
+<p><b>主要经历</b>：湖南韶山农民家庭出身→长沙求学、组织新民学会→北京大学图书馆当助理员→1921年参与创建中国共产党→领导秋收起义→开辟井冈山根据地→率红军长征到达陕北保安。</p>
+<p><b>中考提示</b>：<r>第四篇《一个共产党员的由来》是他唯一的完整自述</r>；“像林肯”是外貌判断题的头号关键词。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">档案2</span>周恩来 —— “大胡子”红军指挥员</summary>
+<div class="inner">
+<p><b>身份定位</b>：中共重要领导人、红军高级指挥员，在百家坪代表苏区接待斯诺的第一位高级领导。</p>
+<p><b>外貌形象</b>：<r>个子清瘦，中等身材，骨骼小而结实</r>；<r>胡子又长又黑</r>，外表“不脱孩子气”，<r>又大又深的眼睛富于热情</r>。</p>
+<p><b>性格特点</b>：<r>头脑冷静，善于分析推理，讲究实际经验</r>；态度温和，谈吐有条理，有一种“羞怯的个人魅力与领袖自信的奇怪混合”。</p>
+<p><b>主要经历</b>：出身大官僚家庭却毅然投身革命→南开学校读书，五四运动中成为学生领袖→赴法国勤工俭学，参与创建旅欧党组织→任黄埔军校政治部主任→组织上海工人武装起义→领导南昌起义→在苏区工作，随红军长征。</p>
+<p><b>专属情节</b>：在百家坪用<r>英语</r>向斯诺问好，告诉他“欢迎任何新闻记者来苏区访问”，并为他<r>规划了92天的采访行程</r>。</p>
+<p><b>中考提示</b>：抓“大胡子”“英语问好”“92天行程计划”三个专属细节。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">档案3</span>朱德 —— 全军爱戴的红军总司令</summary>
+<div class="inner">
+<p><b>身份定位</b>：中国工农红军总司令，官兵心目中“红军之父”式的人物。</p>
+<p><b>外貌形象</b>：貌不惊人，<r>沉默谦虚，说话轻声</r>，饱经风霜；眼睛很大，身材不高却很结实，<r>胳膊和腿像铁打的一样</r>。</p>
+<p><b>性格特点</b>：<r>天性极端温和</r>；爱护部下，与士兵<r>同甘共苦</r>；对工作认真负责，朴实低调，深受全军爱戴。</p>
+<p><b>主要经历</b>：出身贫苦佃农家庭→考入<r>云南讲武堂</r>→参加护国战争→戒除鸦片→旅欧求学，在欧洲加入中国共产党→回国参加<r>南昌起义</r>→率余部转战湘南→<r>井冈山会师</r>（朱毛会师）→任红军总司令随军长征。</p>
+<p><b>中考提示</b>：斯诺采访时<r>没有见到朱德本人</r>，书中内容是<r>战友和妻子康克清等人的转述</r>——判断题常在此设错。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">档案4</span>彭德怀 —— 乐观爱笑的猛将</summary>
+<div class="inner">
+<p><b>身份定位</b>：红军高级将领，斯诺在前线预旺堡重点采访的对象。</p>
+<p><b>外貌形象</b>：<r>动作和说话敏捷，喜欢说说笑笑</r>，很有才智；<r>身体极为健康</r>，精力过人。</p>
+<p><b>性格特点</b>：率直爽朗、乐观豁达；<r>吃得很少很简单</r>，伙食与部下一样；<r>迟睡早起</r>，不知疲倦。</p>
+<p><b>主要经历</b>：少年时因砸坏祖母的鸦片烟盘引发家庭风波、险遭处死，离家谋生，当过牧童、矿工、堤工→入湘军当兵→入湖南讲武堂学习→举行<r>平江起义</r>，创建红五军→上井冈山→长征中率红三军团屡建战功→长征后率部驻守西北前线。</p>
+<p><b>专属情节</b>：长征途中<r>把自己的棉衣脱给小号手</r>；喜欢孩子，身后常跟着一群“红小鬼”，与他们打成一片。</p>
+<p><b>中考提示</b>：抓“棉衣给小号手”“与红小鬼打成一片”“伙食与士兵相同”等专属情节。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">档案5</span>贺龙 —— “一把菜刀”起家的传奇将领</summary>
+<div class="inner">
+<p><b>身份定位</b>：著名红军将领，率部在南方坚持斗争（斯诺未见到他，内容由李长林等人转述）。</p>
+<p><b>外貌形象</b>：<r>大个子，像老虎一样强壮有力</r>；年过半百仍很健康，<r>不知疲倦</r>。</p>
+<p><b>性格特点</b>：<r>口才很好</r>，善于演说，富有感召力；性如烈火、勇猛无畏；对恶霸豪绅疾恶如仇，士兵们都真心拥护他。</p>
+<p><b>主要经历</b>：出身贫苦，早年拉起队伍闹革命→参加并领导<r>南昌起义</r>→起义失败后<r>毅然加入中国共产党</r>→创建革命根据地→率部长征。</p>
+<p><b>专属情节</b>：传说他<r>用一把菜刀在湖南建立了一个苏区</r>——这是书中流传最广的贺龙传奇。</p>
+<p><b>中考提示</b>：贺龙的故事来自<r>红军指挥员李长林的转述</r>，“斯诺当面采访贺龙”是常见设错点；“一把菜刀”是他的专属情节。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">档案6</span>徐海东 —— “红色窑工”</summary>
+<div class="inner">
+<p><b>身份定位</b>：红十五军团军团长，斯诺笔下阶级意识最强的红军领袖之一。</p>
+<p><b>外貌形象</b>：窑工出身，身材壮实，笑容爽朗，毫不摆领导架子。</p>
+<p><b>主要经历</b>：湖北黄陂人，<r>当过多年窑工</r>，人称<r>“红色窑工”</r>→投身红军→作战勇猛，绰号<r>“徐老虎”</r>→据书中记载先后<r>8次负伤</r>→任红十五军团军团长，率部迎接中央红军到陕北。</p>
+<p><b>血泪家史</b>：国民党对苏区进行疯狂报复，<r>他全家族有66人被杀害</r>——他向斯诺沉痛讲述了这段家史。</p>
+<p><b>中考提示</b>：抓“窑工出身”“红色窑工”“8次负伤”“家族66人遇害”四个称号与数字。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">档案7</span>邓发 —— 悬赏五万元的保卫局长</summary>
+<div class="inner">
+<p><b>身份定位</b>：<r>国家政治保卫局局长</r>，负责苏区的治安保卫工作。</p>
+<p><b>外貌形象</b>：年轻精悍，笑容满面，谈吐机智幽默。</p>
+<p><b>专属情节</b>：斯诺进入苏区途中，邓发意外出现在他面前——这位<r>蒋介石悬赏五万元缉拿</r>的“危险人物”，谈笑自若地与斯诺长谈，令他又惊又喜。</p>
+<p><b>中考提示</b>：抓“政治保卫局局长”“悬赏五万元”“途中偶遇”三个关键词；注意不要与邓小平混淆。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">档案8</span>刘志丹 —— 陕北苏区的创建者</summary>
+<div class="inner">
+<p><b>身份定位</b>：陕北红军和陕北苏区的主要创建人之一。</p>
+<p><b>主要经历</b>：陕西保安人→早年投身革命，在陕北坚持武装斗争，创建革命根据地→所部与红二十五军等合编为红十五军团→<r>1936年率部东征，在山西战斗中牺牲</r>。</p>
+<p><b>纪念</b>：为纪念他，他的家乡<r>保安县改名为志丹县</r>。</p>
+<p><b>中考提示</b>：斯诺到达保安时，刘志丹刚牺牲不久，书中记述了这位传奇人物的生平；“保安改志丹”是常考细节。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">档案9</span>红小鬼 —— 少年先锋队员（群体形象）</summary>
+<div class="inner">
+<p><b>身份定位</b>：苏区的少年先锋队员，担任通讯员、勤务员、号手、查路条员等，是苏区一道朝气蓬勃的风景。</p>
+<p><b>形象特点</b>：<r>精神饱满、坚忍乐观</r>；衣着破旧却整洁，纪律严明；<r>认真负责</r>——查验路条一丝不苟，人人过卡都要按规矩来；在艰苦环境里仍勤奋学习、愉快工作。</p>
+<p><b>经典评价</b>：斯诺从他们身上看到了<r>中国的未来与希望</r>。</p>
+<p><b>中考提示</b>：常考对“红小鬼”精神品质的概括——<r>乐观、坚忍、忠诚、有原则、充满朝气</r>。</p>
+</div>
+</details>
+
+<p class="tip">记忆口诀：毛像林肯周大胡，朱德温和彭爱笑，贺龙菜刀徐窑工，邓发悬赏志丹县，红小鬼里有希望。</p>
+</div>
+
+<div class="card">
+<h2>三、篇章要点精讲（12篇）</h2>
+<p class="tip">全书按斯诺的采访行程展开，共12篇。重点篇章：第4篇（毛泽东自述）、第5篇（长征）、第8篇（彭德怀）、第12篇（西安事变）。</p>
+
+<details>
+<summary><span class="tag">第1篇</span>探寻红色中国</summary>
+<div class="inner">
+<p><b>主要内容</b>：斯诺怀着“中国共产党人是什么样的人？红军为什么能在西北存在？”等一连串疑问，于<r>1936年6月</r>从北平出发，经西安，冒险前往红区采访。</p>
+<p><b>常考情节</b>：出发前得到<r>宋庆龄</r>等人的帮助；在西安与中共地下工作者“王牧师”（董健吾）接头，乘东北军卡车驶向苏区。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">第2篇</span>去红都的道路</summary>
+<div class="inner">
+<p><b>主要内容</b>：记述斯诺进入苏区途中的见闻与谈话：与农民交谈，感受他们对红军的好奇与对白军的恐惧；途中意外遇到邓发；在百家坪见到周恩来，周恩来为他安排<r>92天</r>行程；听红军指挥员李长林讲述<r>贺龙</r>的传奇故事。</p>
+<p><b>常考情节</b>：<r>贺龙“一把菜刀建苏区”</r>、<r>邓发悬赏五万元</r>、<r>周恩来规划行程</r>。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">第3篇</span>在保安</summary>
+<div class="inner">
+<p><b>主要内容</b>：斯诺初见毛泽东，多次长谈；记述苏区首府保安的风貌，介绍红军大学与红军剧社。</p>
+<p><b>常考情节</b>：<r>毛泽东的经典外貌描写（像林肯）</r>；红军大学在<r>窑洞里上课</r>，以石头砖块为桌椅；红军剧社演出宣传抗日。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">第4篇</span>一个共产党员的由来（重点篇）</summary>
+<div class="inner">
+<p><b>主要内容</b>：<r>毛泽东的自述</r>：韶山童年与父亲的斗争→长沙求学、当过半年兵→北大图书馆当助理员，受李大钊影响接触马克思主义→参与建党→大革命→秋收起义→井冈山斗争→长征到陕北。</p>
+<p><b>常考情节</b>：本篇是<r>全书唯一完整的毛泽东生平自述</r>，是研究他生平的重要文献；少年毛泽东曾与父亲发生冲突、据理力争。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">第5篇</span>长征（重点篇）</summary>
+<div class="inner">
+<p><b>主要内容</b>：记述红军长征全过程：第五次反“围剿”失利→突围转移→强渡大渡河、<r>飞夺泸定桥</r>→翻大雪山→过大草地→到达陕北。</p>
+<p><b>常考情节</b>：泸定桥英雄<r>攀着悬空铁索、冒着枪林弹雨</r>冲锋；斯诺统计：红军历经11个省份，翻越18座山脉（其中5座终年积雪），渡过24条河流；评价长征是<r>军事史上伟大的业绩</r>之一、是<r>“历史上最盛大的武装巡回宣传”</r>。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">第6篇</span>红星在西北</summary>
+<div class="inner">
+<p><b>主要内容</b>：介绍西北苏区的政治、经济与社会生活：苏维埃政府<r>没收地主土地分给农民</r>、<r>取消苛捐杂税</r>、发行苏区货币、创办合作社；兴办教育，开展<r>消灭文盲</r>运动。</p>
+<p><b>常考情节</b>：教育家<r>徐特立</r>谈苏区教育；斯诺由此看到共产党赢得民心的根源。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">第7篇</span>去前线的路上</summary>
+<div class="inner">
+<p><b>主要内容</b>：斯诺离开保安前往预旺堡前线，一路记录西北乡村风貌、农民的谈话和苏区的社会景象，展现百姓生活的变化和对红军的拥护。</p>
+<p><b>常考情节</b>：沿途与农民、骡夫的交谈；红军帮助百姓、军民关系融洽的种种细节。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">第8篇</span>同红军在一起（重点篇）</summary>
+<div class="inner">
+<p><b>主要内容</b>：斯诺在前线与红军共同生活，重点采访<r>彭德怀</r>：其童年遭遇、行伍经历、平江起义；记述红军战士的日常生活——政治课、识字班、体育比赛、歌唱演出，官兵平等、生气勃勃。</p>
+<p><b>常考情节</b>：<r>彭德怀把棉衣脱给小号手</r>；彭德怀与“红小鬼”打成一片；战士们上政治课、开展文娱活动。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">第9篇</span>同红军在一起（续）</summary>
+<div class="inner">
+<p><b>主要内容</b>：采访<r>徐海东</r>与红十五军团：徐海东的窑工出身、战斗经历与家族血泪史；记述苏区的阶级状况和红军的群众工作。</p>
+<p><b>常考情节</b>：<r>“红色窑工”</r>称号、<r>先后8次负伤</r>、<r>全家族66人被杀害</r>。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">第10篇</span>战争与和平</summary>
+<div class="inner">
+<p><b>主要内容</b>：记述红军的战术训练与战地生活；通过战友与妻子<r>康克清</r>等人的讲述，介绍<r>朱德</r>的生平与品格——贫苦出身→云南讲武堂→旅欧入党→南昌起义→井冈山会师→红军总司令。</p>
+<p><b>常考情节</b>：<r>朱德天性温和、爱兵如子</r>；斯诺未见到朱德本人，内容为转述。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">第11篇</span>回到保安</summary>
+<div class="inner">
+<p><b>主要内容</b>：斯诺返回保安，与毛泽东等再次长谈，了解中共对时局的看法与<r>抗日民族统一战线</r>政策；记述离开苏区前后的见闻与感想。</p>
+<p><b>常考情节</b>：毛泽东分析时局走向；中共停止推翻国民政府的方针、团结一切力量抗日的政策转变。</p>
+</div>
+</details>
+
+<details>
+<summary><span class="tag">第12篇</span>又是白色世界（重点篇）</summary>
+<div class="inner">
+<p><b>主要内容</b>：斯诺回到白区后，详细记述并分析<r>西安事变</r>：<r>1936年12月12日</r>，<r>张学良、杨虎城</r>发动“兵谏”扣押蒋介石；中共从民族大义出发主张<r>和平解决</r>，派周恩来等赴西安谈判，事变和平解决，国共走向合作抗日。</p>
+<p><b>常考情节</b>：西安事变的时间、人物与和平解决的意义——名著题常与历史知识综合考查。</p>
+</div>
+</details>
+</div>
+
+<div class="card">
+<h2>四、艺术特色与中考题型</h2>
+<h3>艺术特色（简答题常背四点）</h3>
+<ul>
+<li><r>真实</r>：实地采访＋人物口述＋亲眼观察，全部是第一手材料，绝不虚构；</li>
+<li><r>客观</r>：如实记录，既写领袖也写战士、农民、“红小鬼”，多角度呈现红色中国；</li>
+<li><r>传神</r>：白描手法，外貌、语言、动作等细节生动，人物形神兼备；</li>
+<li><r>热情</r>：语言朴实生动，夹叙夹议，饱含对红色中国的深情与判断。</li>
+</ul>
+<h3>中考常考题型</h3>
+<ul>
+<li><b>文学常识</b>：作者、国籍、成书时间、书名含义、文体（“小说”“自传”是设错点）；</li>
+<li><b>描写对应</b>：外貌、语言描写判断人物——抓专属关键词（像林肯＝毛泽东，大胡子＝周恩来）；</li>
+<li><b>情节判断与排序</b>：事件的先后顺序（泸定桥→进苏区→西安事变→出书）、情节与人物对应；</li>
+<li><b>人物分析</b>：结合情节概括形象（彭德怀乐观爱兵、朱德温和爱兵、贺龙勇猛豪爽）；</li>
+<li><b>纪实特征与感悟</b>：谈真实性的来源，谈“红星”精神带给自己的启示。</li>
+</ul>
+</div>
+
+</section>
+
+<section id="panel1" class="panel">
+
+<div class="card">
+<h2>学生信息</h2>
+<p class="tip">填写班级码和姓名后开始闯关，信息可随时修改；每人限答一次，答题记录与解析自动保存在本页；做完20题成绩自动记入榜单，每人只记首次成绩。</p>
+<div class="form-row">
+<label>班级码</label>
+<input id="stu-cls" maxlength="8" inputmode="numeric" placeholder="3-8位数字，如 202601">
+<label>姓名</label>
+<input id="stu-name" maxlength="12" placeholder="你的姓名">
+<button class="btn" onclick="startQuiz()">开始闯关</button>
+</div>
+</div>
+
+<div class="card" id="quiz-card" style="display:none">
+<h2>知识闯关</h2>
+<div class="q-top"><span id="q-progress">第1题 · 已完成0/20</span><span id="q-live">当前得分：0分</span></div>
+<div id="q-note" class="q-note"></div>
+<div class="chips" id="q-chips"></div>
+<div id="q-body"></div>
+<div class="q-nav">
+<button class="btn ghost" id="q-prev" onclick="navQ(-1)">上一题</button>
+<button class="btn" id="q-next" onclick="navQ(1)">下一题</button>
+</div>
+<div id="q-result"></div>
+</div>
+
+</section>
+
+<section id="panel2" class="panel">
+
+<div class="card">
+<h2>成绩榜单</h2>
+<p class="tip">榜单自动读取“知识闯关”中填写的班级码，展示全班排名；未填写班级码时显示全部成绩。</p>
+<div id="board-hint" class="hint" style="display:block">暂无成绩记录。完成“知识闯关”后，成绩会自动记入榜单。</div>
+<table class="board" id="board-table" style="display:none">
+<thead><tr><th style="width:64px">名次</th><th id="th-cls" style="display:none;width:90px">班级码</th><th>姓名</th><th style="width:100px">得分</th></tr></thead>
+<tbody id="board-rows"></tbody>
+</table>
+<div style="margin-top:12px;padding-top:10px;border-top:1px dashed #f0e6cf;text-align:right"><button class="tbtn" onclick="teacherClear()">教师清除榜单数据</button></div>
+</div>
+
+</section>
+
+</div>
+
+<div class="mask" id="mask" style="display:none" onclick="maskClick(event)">
+<div class="modal">
+<h3>答案解析</h3>
+<p id="m-q" class="tip"></p>
+<p id="m-ans" class="m-ans"></p>
+<p id="m-exp"></p>
+<div style="text-align:center;margin-top:14px"><button class="btn" onclick="closeModal()">我知道了，继续答题</button></div>
+</div>
+</div>
+
+<div class="mask" id="tmask" style="display:none" onclick="tmaskClick(event)">
+<div class="modal" style="max-width:380px">
+<h3>教师清除榜单数据</h3>
+<div id="t-step1">
+<p class="tip">请输入教师密码，验证通过后可清除全部成绩记录与答题记录（清除后每位学生可重新闯关）。</p>
+<input id="t-pw" type="password" inputmode="numeric" maxlength="8" placeholder="请输入教师密码" style="width:100%;margin-top:6px" onkeydown="if(event&&event.key=='Enter')tCheckPw()">
+<p id="t-err" style="display:none;color:#b91c1c;font-size:13px;font-weight:700;margin-top:6px">密码错误，请重新输入。</p>
+<div style="text-align:center;margin-top:14px"><button class="btn" onclick="tCheckPw()">下一步</button> <button class="btn ghost" style="margin-left:10px" onclick="closeTmask()">取消</button></div>
+</div>
+<div id="t-step2" style="display:none">
+<p style="font-weight:700;color:#b91c1c;margin:4px 0">即将删除全部成绩记录和答题记录，此操作不可恢复！</p>
+<p class="tip">清除内容：榜单全部成绩、每人的答题记录与解析回看、本页保存的班级码和姓名。清除后所有学生可重新答题闯关。</p>
+<div style="text-align:center;margin-top:14px"><button class="btn" onclick="tDoClear()">确认清除</button> <button class="btn ghost" style="margin-left:10px" onclick="closeTmask()">取消</button></div>
+</div>
+</div>
+</div>
+
+<script>
+window.onerror=function(msg,src,line){var b=document.getElementById('errbar');if(b){b.style.display='block';b.innerHTML='脚本错误提示：'+msg+'（第'+line+'行）。请截图发给老师。';}return false;};
+
+var QS=[
+{q:'下列关于《红星照耀中国》的说法，不正确的一项是（）',o:['作者是美国著名记者埃德加·斯诺','这是一部用第一人称写成的自传体小说','1936年6月至10月，作者深入陕甘宁边区实地采访，写成此书','这是第一部向全世界真实报道中国共产党和工农红军的纪实作品'],a:1,e:'《红星照耀中国》是纪实文学（报告文学），记录的是作者的采访见闻，不是虚构的小说，更不是自传，B项文体判断错误。A、C、D三项均符合原著。'},
+{q:'“红星照耀中国”这一书名中，“红星”的主要含义是（）',o:['夜空中最亮的一颗星','红军帽子上的红五角星','中国共产党及其领导的红色革命，如一颗闪亮的红星照耀全中国','苏区里高高飘扬的红旗'],a:2,e:'“红星”象征中国共产党及其领导的红色革命——它如一颗闪亮的红星，不仅照耀着中国的西北，而且必将照耀全中国。这是斯诺基于实地采访作出的著名预言。'},
+{q:'1937年10月，《红星照耀中国》在伦敦首次出版，震动了全世界。该书的作者是（）',o:['美国记者埃德加·斯诺','美国作家史沫特莱','新西兰友人路易·艾黎','加拿大医生白求恩'],a:0,e:'作者是美国记者埃德加·斯诺。史沫特莱著有《伟大的道路》（记朱德生平），白求恩是来华助战的加拿大医生，路易·艾黎是新西兰籍社会活动家，注意区分。'},
+{q:'“他是个面容瘦削、看上去很像林肯的人物。个子高出一般的中国人，背有些驼，一头浓密的黑发留得很长，双眼炯炯有神，鼻梁很高，颧骨突出。”这段外貌描写的人物是（）',o:['周恩来','毛泽东','朱德','彭德怀'],a:1,e:'出自第三篇《在保安》，是斯诺初见毛泽东时的经典外貌描写。抓关键词：像林肯、背有些驼、颧骨突出。外貌描写对应人物是中考高频题型。'},
+{q:'下列关于贺龙的表述，与原著不符的一项是（）',o:['他大个子，像老虎一样强壮有力，年过半百仍不知疲倦','据说他口才很好，善于演说，富有感召力','斯诺多次当面采访贺龙，书中关于他的内容都出自本人自述','传说他曾用一把菜刀在湖南建立了一个苏区'],a:2,e:'斯诺进入苏区时并没有见到贺龙，书中关于贺龙的故事主要是红军指挥员李长林等人向他转述的，C项错误。A、B、D三项都是书中转述的贺龙形象。'},
+{q:'将下列事件按时间先后顺序排列，正确的一项是（）<br>①红军飞夺泸定桥　②斯诺进入陕北苏区采访　③西安事变　④《红星照耀中国》在伦敦出版',o:['①②③④','②①③④','①③②④','②③①④'],a:0,e:'飞夺泸定桥在1935年5月长征途中；斯诺1936年6月从北平出发、7月进入陕北苏区；西安事变发生在1936年12月12日；本书1937年10月在伦敦出版。故顺序为①②③④。'},
+{q:'斯诺进入苏区后，在百家坪迎接他、用英语向他问好、并为他规划了92天采访行程的红军领导人是（）',o:['毛泽东','邓发','彭德怀','周恩来'],a:3,e:'周恩来在百家坪迎接斯诺，用英语向他问好，告诉他欢迎任何新闻记者来苏区访问，并为他规划了92天的采访行程。毛泽东、彭德怀都是斯诺此后才见到的。'},
+{q:'下列关于朱德的表述，不正确的一项是（）',o:['他出身贫苦佃农家庭，后考入云南讲武堂','斯诺在苏区采访时，朱德向斯诺详细讲述了自己的生平','他天性温和，爱护部下，与士兵同甘共苦，深受全军爱戴','他旅欧期间加入中国共产党'],a:1,e:'斯诺采访时，朱德正随红四方面军行动，斯诺没有见到他本人；书中关于朱德的生平与品格，主要是战友和妻子康克清等人的转述。A、C、D三项均符合书中记述。'},
+{q:'下列情节与人物的对应，有误的一项是（）',o:['长征途中把自己的棉衣脱给小号手——彭德怀','用一把菜刀在湖南建立苏区——贺龙','出身窑工，人称“红色窑工”——徐海东','面容瘦削，看上去很像林肯——周恩来'],a:3,e:'“面容瘦削、看上去很像林肯”写的是毛泽东，不是周恩来，D项对应有误。A对应彭德怀（出自《同红军在一起》），B对应贺龙，C对应徐海东。'},
+{q:'人称“红色窑工”，且全家族有66人遭反动派杀害的红军将领是（）',o:['徐海东','刘志丹','贺龙','邓发'],a:0,e:'徐海东是红十五军团军团长，出身贫苦，做过多年窑工，人称“红色窑工”；他作战勇猛，绰号“徐老虎”，据书中记载先后8次负伤；国民党杀害了他全家族66人。'},
+{q:'斯诺进入苏区的途中，意外遇到一位蒋介石悬赏五万元缉拿的“危险人物”，他是（）',o:['邓小平','邓发','徐海东','刘志丹'],a:1,e:'此人是国家政治保卫局局长邓发。斯诺进入苏区途中，这位悬赏五万元的“危险人物”意外出现在他面前，谈笑自若地与他长谈。注意与邓小平区分。'},
+{q:'书中的“红小鬼”给斯诺留下了深刻印象。下列说法与原著不符的一项是（）',o:['他们大多出身富裕家庭，参军是为了升官发财','他们多是少年先锋队员，担任通讯员、勤务员、号手，还要查验路条','他们精神饱满、坚忍乐观，衣着破旧却纪律严明','斯诺从他们身上看到了中国的未来与希望'],a:0,e:'“红小鬼”大多出身贫苦、历经磨难，却在苏区勤奋学习、愉快工作，查路条一丝不苟，坚忍而乐观。A项与原著完全不符。'},
+{q:'关于长征，下列说法与原著不符的一项是（）',o:['第五次反‘围剿’的胜利，是红军被迫长征的直接原因','红军战士攀着悬空的铁索，冒着枪林弹雨夺取了泸定桥','斯诺称赞长征是军事史上伟大的业绩之一','斯诺说长征是历史上最盛大的武装巡回宣传'],a:0,e:'第五次反“围剿”失利（失败），红军才被迫实行战略转移、开始长征，A项把失利说成胜利，与原著不符。B、C、D均为书中记述与评价。'},
+{q:'下列对《红星照耀中国》艺术特色的赏析，不正确的一项是（）',o:['作者深入实地采访，掌握大量第一手资料，真实可信','作者善用外貌、语言、动作等描写刻画人物，形神兼备','作者用浪漫主义笔法虚构了大量离奇情节，使人物更富传奇色彩','作品语言朴实生动，字里行间饱含热情'],a:2,e:'《红星照耀中国》是纪实作品，真实性是它的生命；作者凭实地采访获取材料，绝不虚构离奇情节，C项错误。A、B、D三项均为本书艺术特色。'},
+{q:'第四篇《一个共产党员的由来》被公认为全书的重要篇章，其主要内容是（）',o:['周恩来讲述南昌起义的经过','毛泽东向斯诺讲述自己的人生经历','朱德口述自己的军旅生涯','徐海东讲述自己的窑工出身'],a:1,e:'本篇是毛泽东接受斯诺采访时的生平自述：从韶山童年、长沙求学、北大图书馆岁月，到建党、秋收起义、井冈山斗争直至长征，是书中唯一完整的毛泽东自述，也是研究他生平的重要文献。'},
+{q:'关于毛泽东的日常生活与个性，下列说法与原著不符的一项是（）',o:['他自幼养尊处优，从不愿参加体力劳动','他住在简陋的窑洞里，全部财物只是一卷铺盖和几件随身衣物','他博览群书，对哲学和历史有深入研究，能与斯诺彻夜长谈','他有吃辣椒的嗜好，甚至拿辣椒开玩笑'],a:0,e:'毛泽东出身湖南韶山农民家庭，少年时经常下田干活；他住简陋窑洞，伙食和大家一样，爱吃辣椒，博览群书，精力过人。A项与原著不符。'},
+{q:'他是陕北红军和陕北苏区的主要创建人之一，1936年率部东征时牺牲，家乡保安县后来改名志丹县。此人是（）',o:['谢子长','徐海东','刘志丹','邓发'],a:2,e:'刘志丹是陕北苏区的主要创建人之一，1936年4月在东征山西的战斗中牺牲。为纪念他，家乡保安县改名为志丹县。注意：谢子长牺牲后，安定县改名为子长县，两者不要混淆。'},
+{q:'为获得真实材料，斯诺写作本书时做了大量工作。下列不属于其做法的一项是（）',o:['冒着生命危险穿过封锁线，深入陕北苏区','与毛泽东、周恩来等领导人反复长谈','广泛接触农民、工人、战士和“红小鬼”等各类人物','凭空想象，虚构了红军爬雪山、过草地的情节'],a:3,e:'爬雪山、过草地等都是红军将士亲历、斯诺采访记录的真实事件，绝非虚构。实地考察、人物口述、亲眼观察，正是本书真实性与说服力的来源。'},
+{q:'“他个子清瘦，中等身材，骨骼小而结实，尽管胡子又长又黑，外表上仍不脱孩子气，又大又深的眼睛富于热情。”这段外貌描写的人物是（）',o:['毛泽东','朱德','周恩来','徐海东'],a:2,e:'出自第二篇《去红都的道路》，是斯诺在百家坪初见周恩来时的描写。抓关键词：清瘦、大胡子、不脱孩子气、眼睛富于热情。'},
+{q:'斯诺为什么断言“红星必将照耀全中国”？下列理解最恰当的一项是（）',o:['红军装备精良、兵力强大，很快能用武力统一全国','中国共产党代表劳苦大众的利益，红军纪律严明、与人民同甘共苦，赢得人民衷心拥护，红色革命必将胜利','苏联会出兵中国，帮助红军夺取全国政权','国民党军队毫无战斗力，不堪一击'],a:1,e:'斯诺在苏区看到：农民分得土地、苛捐杂税被取消；红军官兵平等、纪律严明；“红小鬼”乐观向上——共产党人赢得了民心。他由此预言红星必将照耀全中国。B项理解最恰当。'}
+];
+
+var LET='ABCD';
+var TOTAL=20,PTS=5;
+var cur=0,ans=[],started=false,finished=false,recorded=false,lastScore=0;
+var MEM=[];
+var QMEM={};
+
+function sGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function sSet(k,v){try{localStorage.setItem(k,v);return true;}catch(e){return false;}}
+function saveStu(){var o={cls:E('stu-cls').value.trim(),name:E('stu-name').value.trim()};sSet('hx_stu_v1',JSON.stringify(o));}
+function saveQuizState(c,n,ansArr,sc){
+var key,all;
+if(!clsOk(c)||!n)return;
+key=c+'|'+n;
+all=null;
+try{all=JSON.parse(sGet('hx_quiz_v1')||'{}');}catch(e){all=null;}
+if(!(all&&typeof all=='object'))all={};
+all[key]={ans:ansArr.slice(0),score:sc};
+if(!sSet('hx_quiz_v1',JSON.stringify(all)))QMEM[key]=all[key];
+}
+function loadQuizState(c,n){
+var key,all,o;
+key=c+'|'+n;all=null;o=null;
+try{all=JSON.parse(sGet('hx_quiz_v1')||'{}');}catch(e){all=null;}
+if(all&&all[key])o=all[key];
+else if(QMEM[key])o=QMEM[key];
+if(!o||!(o.ans instanceof Array)||o.ans.length!=TOTAL)return null;
+return o;
+}
+function note(m){var d=E('q-note');if(!d)return;if(m){d.innerHTML=m;d.style.display='block';}else{d.innerHTML='';d.style.display='none';}}
+
+function E(id){return document.getElementById(id);}
+function clsOk(v){return /^[0-9]{3,8}$/.test(v);}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function showTab(n){
+var i,p,t;
+for(i=0;i<3;i++){
+p=E('panel'+i);t=E('tb'+i);
+if(!p||!t)continue;
+p.className=(i==n)?'panel active':'panel';
+t.className=(i==n)?'tab-btn active':'tab-btn';
+}
+if(n==2){renderBoard();}
+try{window.scrollTo(0,0);}catch(e){}
+}
+
+function startQuiz(){
+var c=E('stu-cls').value.trim(),n=E('stu-name').value.trim(),i,rec,sc;
+if(!clsOk(c)){alert('班级码请输入3-8位数字，例如：202601');E('stu-cls').focus();return;}
+if(!n){alert('请填写姓名');E('stu-name').focus();return;}
+E('stu-cls').value=c;E('stu-name').value=n;saveStu();
+started=true;recorded=false;lastScore=0;
+E('quiz-card').style.display='block';
+E('q-result').innerHTML='';
+rec=loadQuizState(c,n);
+ans=[];
+if(rec){
+for(i=0;i<TOTAL;i++)ans.push((rec.ans[i]>=0&&rec.ans[i]<=3)?rec.ans[i]:-1);
+sc=0;for(i=0;i<TOTAL;i++){if(ans[i]==QS[i].a)sc+=PTS;}
+lastScore=sc;
+if(allDone()){
+finished=true;cur=0;
+note('每人限答一次。你已完成闯关，以下是答题回看，可逐题核对答案与解析。');
+E('q-result').innerHTML=resultCard(lastScore);
+}else{
+finished=false;cur=0;
+for(i=0;i<TOTAL;i++){if(ans[i]<0){cur=i;break;}}
+note('已恢复你上次的答题进度（每人限答一次），请继续完成剩余题目。');
+}
+}else{
+finished=false;cur=0;
+for(i=0;i<TOTAL;i++)ans.push(-1);
+note('');
+}
+renderChips();renderQ();renderBoard();
+try{E('quiz-card').scrollIntoView({behavior:'smooth',block:'start'});}catch(e){}
+}
+
+function renderChips(){
+var h='',i,cls;
+for(i=0;i<TOTAL;i++){
+cls='chip';
+if(ans[i]>=0)cls+=(ans[i]==QS[i].a)?' ok':' bad';
+if(i==cur&&!finished)cls+=' cur';
+h+='<span class="'+cls+'" onclick="jumpQ('+i+')">'+(i+1)+'</span>';
+}
+E('q-chips').innerHTML=h;
+}
+
+function renderQ(){
+var i,k,q,h,done,sc,cls,answered;
+if(!started)return;
+done=0;sc=0;
+for(i=0;i<TOTAL;i++){if(ans[i]>=0){done++;if(ans[i]==QS[i].a)sc+=PTS;}}
+E('q-progress').innerHTML=finished?('闯关完成 · 已完成'+done+'/'+TOTAL+' · 可回看题目'):('第'+(cur+1)+'题 · 已完成'+done+'/'+TOTAL);
+E('q-live').innerHTML=(finished?'最终得分：':'当前得分：')+sc+'分';
+q=QS[cur];answered=(ans[cur]>=0);
+h='<div class="q-text">'+(cur+1)+'．'+q.q+'</div>';
+for(k=0;k<4;k++){
+cls='opt';
+if(answered){
+cls+=' lock';
+if(k==q.a)cls+=' right';
+else if(k==ans[cur])cls+=' wrong';
+}
+h+='<button type="button" class="'+cls+'" onclick="pick('+k+')"><b>'+LET[k]+'．</b>'+q.o[k]+'</button>';
+}
+if(answered){
+if(ans[cur]==q.a)h+='<div class="fb ok">回答正确，得5分！</div>';
+else h+='<div class="fb bad">这道题答错了，正确答案是 '+LET[q.a]+'：'+q.o[q.a]+'</div>';
+h+='<div class="exp"><b>解析：</b>'+q.e+'</div>';
+}
+E('q-body').innerHTML=h;
+E('q-prev').disabled=(cur==0);
+E('q-next').disabled=(cur==TOTAL-1);
+}
+
+function pick(k){
+var q;
+if(!started||finished)return;
+if(ans[cur]>=0)return;
+ans[cur]=k;
+saveQuizState(E('stu-cls').value.trim(),E('stu-name').value.trim(),ans,-1);
+if(k!=QS[cur].a){
+q=QS[cur];
+E('m-q').innerHTML='第'+(cur+1)+'题　'+q.q;
+E('m-ans').innerHTML='正确答案：'+LET[q.a]+'．'+q.o[q.a];
+E('m-exp').innerHTML='解析：'+q.e;
+E('mask').style.display='flex';
+}
+renderChips();renderQ();
+if(allDone())finish();
+}
+
+function allDone(){
+var i;
+for(i=0;i<TOTAL;i++){if(ans[i]<0)return false;}
+return true;
+}
+
+function navQ(d){
+var n;
+if(!started)return;
+n=cur+d;
+if(n<0||n>=TOTAL)return;
+cur=n;renderChips();renderQ();
+}
+
+function jumpQ(i){
+if(!started)return;
+cur=i;renderChips();renderQ();
+}
+
+function finish(){
+var i,sc;
+finished=true;sc=0;
+for(i=0;i<TOTAL;i++){if(ans[i]==QS[i].a)sc+=PTS;}
+lastScore=sc;
+saveQuizState(E('stu-cls').value.trim(),E('stu-name').value.trim(),ans,sc);
+note('');
+E('q-result').innerHTML=resultCard(sc);
+cur=0;renderChips();renderQ();
+}
+
+function resultCard(sc){
+var msg,h;
+if(sc==100)msg='满分！你就是那颗最亮的红星！';
+else if(sc>=90)msg='优秀！稳扎稳打，冲刺满分！';
+else if(sc>=75)msg='良好！再翻翻人物档案和篇章要点，向90分进发。';
+else if(sc>=60)msg='及格过关！把资料里的红色重点再背一遍吧。';
+else msg='别灰心！把“复习闯关”里的红色重点再背一遍，下次一定进步。';
+h='<div class="score-card"><div class="score-num">'+sc+' 分</div><div class="score-msg">'+msg+'</div><div class="score-sub">'+esc(E('stu-name').value.trim())+'（班级码 '+esc(E('stu-cls').value.trim())+'）· 20题答对 '+(sc/PTS)+' 题</div>';
+h+=tryRecord(sc);
+h+='</div>';
+return h;
+}
+
+function recordScore(c,n,sc){
+var i,arr,raw;
+try{
+raw=localStorage.getItem('hx_board_v2');
+arr=raw?JSON.parse(raw):[];
+if(!(arr instanceof Array))arr=[];
+for(i=0;i<arr.length;i++){
+if(arr[i]&&arr[i].cls==c&&arr[i].name==n)return 'exists';
+}
+arr.push({cls:c,name:n,score:sc});
+localStorage.setItem('hx_board_v2',JSON.stringify(arr));
+return 'ok';
+}catch(e){}
+for(i=0;i<MEM.length;i++){
+if(MEM[i].cls==c&&MEM[i].name==n)return 'exists';
+}
+MEM.push({cls:c,name:n,score:sc});
+return 'mem';
+}
+
+function tryRecord(sc){
+var c=E('stu-cls').value.trim(),n=E('stu-name').value.trim(),st;
+if(!clsOk(c)||!n){return '<div class="score-sub" id="rec-note" style="color:#b45309">学生信息未填写完整，成绩暂未记入榜单。补填后点击<button class="btn" style="padding:2px 10px;font-size:12px;margin-left:6px" onclick="manualRecord()">记入榜单</button></div>';}
+st=recordScore(c,n,sc);
+if(st=='ok'){recorded=true;return '<div class="score-sub" id="rec-note" style="color:#166534">成绩已自动记入榜单，去“成绩榜单”页看看排名吧。</div>';}
+if(st=='exists'){recorded=true;return '<div class="score-sub" id="rec-note" style="color:#b45309">该同学的成绩已在榜单中（每人只记首次成绩），可去“成绩榜单”页查看。</div>';}
+recorded=true;
+return '<div class="score-sub" id="rec-note" style="color:#b45309">浏览器限制了本地存储，成绩暂存本页内存，请勿刷新页面。</div>';
+}
+
+function manualRecord(){
+var el=E('rec-note');
+if(el)el.outerHTML=tryRecord(lastScore);
+}
+
+function renderBoard(){
+var c=E('stu-cls').value.trim(),n=E('stu-name').value.trim(),i,arr,raw,rows,rc,me,hint,tab,allView,thc;
+hint=E('board-hint');tab=E('board-table');
+if(!hint||!tab)return;
+arr=null;
+try{raw=localStorage.getItem('hx_board_v2');if(raw)arr=JSON.parse(raw);}catch(e){arr=null;}
+if(!(arr instanceof Array))arr=MEM.slice(0);
+arr=arr.filter(function(x){return x&&x.cls&&x.name&&typeof x.score=='number';});
+if(arr.length==0){hint.style.display='block';hint.innerHTML='暂无成绩记录。完成“知识闯关”后，成绩会自动记入榜单。';tab.style.display='none';return;}
+allView=!clsOk(c);
+thc=E('th-cls');
+if(thc)thc.style.display=allView?'':'none';
+if(!allView){
+arr=arr.filter(function(x){return x.cls==c;});
+if(arr.length==0){hint.style.display='block';hint.innerHTML='班级码 '+esc(c)+' 暂无成绩记录。可清空班级码查看全部成绩。';tab.style.display='none';return;}
+}
+arr.sort(function(a,b){return b.score-a.score;});
+rows='';
+for(i=0;i<arr.length;i++){
+rc=(i==0)?'rank1':(i==1?'rank2':(i==2?'rank3':''));
+me=(n&&arr[i].name==n&&(!clsOk(c)||arr[i].cls==c))?' class="me"':'';
+rows+='<tr'+me+'><td class="'+rc+'">'+(i+1)+'</td>'+(allView?'<td>'+esc(arr[i].cls)+'</td>':'')+'<td>'+esc(arr[i].name)+'</td><td><b>'+arr[i].score+'</b> 分</td></tr>';
+}
+E('board-rows').innerHTML=rows;
+hint.style.display='none';tab.style.display='block';
+}
+
+function closeModal(){E('mask').style.display='none';}
+function maskClick(ev){if(ev&&ev.target&&ev.target.id=='mask')closeModal();}
+
+function teacherClear(){
+E('t-pw').value='';E('t-err').style.display='none';
+E('t-step1').style.display='block';E('t-step2').style.display='none';
+E('tmask').style.display='flex';
+try{E('t-pw').focus();}catch(e){}
+}
+function closeTmask(){E('tmask').style.display='none';}
+function tmaskClick(ev){if(ev&&ev.target&&ev.target.id=='tmask')closeTmask();}
+function tCheckPw(){
+if(E('t-pw').value.trim()!='7886'){E('t-err').style.display='block';E('t-pw').value='';try{E('t-pw').focus();}catch(e){}return;}
+E('t-err').style.display='none';
+E('t-step1').style.display='none';E('t-step2').style.display='block';
+}
+function tDoClear(){
+try{localStorage.removeItem('hx_board_v2');}catch(e){}
+try{localStorage.removeItem('hx_quiz_v1');}catch(e){}
+try{localStorage.removeItem('hx_stu_v1');}catch(e){}
+MEM.length=0;
+var k;for(k in QMEM)delete QMEM[k];
+E('stu-cls').value='';E('stu-name').value='';
+started=false;finished=false;recorded=false;lastScore=0;cur=0;ans=[];
+E('quiz-card').style.display='none';
+E('q-result').innerHTML='';
+note('');
+closeTmask();
+renderBoard();
+}
+
+function init(){
+var o=null;
+try{o=JSON.parse(sGet('hx_stu_v1')||'null');}catch(e){o=null;}
+if(o&&typeof o=='object'){
+if(o.cls)E('stu-cls').value=String(o.cls);
+if(o.name)E('stu-name').value=String(o.name);
+}
+try{E('stu-cls').addEventListener('input',function(){saveStu();renderBoard();});}catch(e){}
+try{E('stu-name').addEventListener('input',function(){saveStu();renderBoard();});}catch(e){}
+renderBoard();
+}
+init();
+</script>
+</body>
+</html>
